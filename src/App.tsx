@@ -1,25 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
+import { useContext } from "react";
+import CreateUpdatePostPage from "./module/posts/pages/CreateUpdatePost";
+import Login from "./module/login/pages/Login";
+import { AuthContextProv } from "./context/authContext";
+import AppHeader from "./module/posts/components/Header";
+import ListMoviePage from "./module/posts/pages/ListPosts";
 
 function App() {
+  const context = useContext(AuthContextProv);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      {context.isAuthenticated ? <AppHeader /> : null}
+      <Switch>
+        <PrivateRoute exact path="/">
+          <ListMoviePage />
+        </PrivateRoute>
+        <PrivateRoute path="/create">
+          <CreateUpdatePostPage />
+        </PrivateRoute>
+        <PrivateRoute path="/update/:id/">
+          <CreateUpdatePostPage />
+        </PrivateRoute>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route>404</Route>
+      </Switch>
+    </BrowserRouter>
+  );
+}
+// @ts-ignore
+function PrivateRoute({ children, ...rest }) {
+  const context = useContext(AuthContextProv);
+  return (
+    <Route {...rest}>
+      {context.isAuthenticated ? children : <Redirect to="/login" />}
+    </Route>
   );
 }
 
