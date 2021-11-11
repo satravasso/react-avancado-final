@@ -40,7 +40,6 @@ export const CreateUser = () => {
 
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
-  const [severity, setSeverity] = React.useState("");
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -53,7 +52,6 @@ export const CreateUser = () => {
   function handleMessage(message: string, severity: string) {
     setOpen(true);
     setMessage(message);
-    setSeverity(severity);
   }
 
   return (

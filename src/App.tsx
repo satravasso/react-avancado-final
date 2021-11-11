@@ -20,7 +20,7 @@ function App() {
         <PrivateRoute path="/create">
           <CreateUpdatePostPage />
         </PrivateRoute>
-        <PrivateRoute path="/update/:id/">
+        <PrivateRoute path="/create/:idPost">
           <CreateUpdatePostPage />
         </PrivateRoute>
         <Route path="/login">

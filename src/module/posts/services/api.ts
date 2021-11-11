@@ -23,6 +23,12 @@ export async function getPosts() {
   return response;
 }
 
+export async function getPostbyID(id: string) {
+  const response = await api.get(`/blog/${id}`);
+  console.log("Get Posts", response);
+  return response;
+}
+
 export async function deletePost(id: string) {
   const response = await api.delete(`/blog/${id}`);
   console.log("Delete Post", response);

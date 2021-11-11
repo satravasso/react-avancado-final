@@ -9,17 +9,44 @@ import { useFormik } from "formik";
 import { validationDados } from "./validate";
 
 import { createPost } from "../services/api";
-import { useHistory } from "react-router";
-import React from "react";
+import { useHistory, useLocation, useParams } from "react-router";
+import React, { useEffect } from "react";
 import { Alert } from "@mui/material";
 
-export const Form = () => {
+import { getPostbyID } from "../services/api";
+
+interface Post {
+  id?: string;
+}
+
+export const Form = (props: Post) => {
   const history = useHistory();
+  const location = useLocation();
+  const [title, setTitle] = React.useState("");
+  const [content, setContent] = React.useState("");
+
+  useEffect(() => {
+    const id = location.pathname.replace(/[^0-9]/g, "");
+    if (id) {
+      document.title = "Alterar";
+      getPostbyId(id);
+    }
+    setTitle("");
+    setContent("");
+  }, [location]);
+
+  async function getPostbyId(id: string) {
+    const response: any = await getPostbyID(id);
+    setTitle(response.data.title);
+    setContent(response.data.content);
+  }
+
   const formik = useFormik({
     initialValues: {
-      title: "",
-      content: "",
+      title: title,
+      content: content,
     },
+    enableReinitialize: true,
     validationSchema: validationDados,
     onSubmit: (values, { setStatus, resetForm }) => {
       createPost(values)
