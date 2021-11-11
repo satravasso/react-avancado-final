@@ -10,4 +10,9 @@ function login(token: any) {
   localStorage.setItem("token", token);
 }
 
-export { isAuthenticated, getToken, login };
+function logoutStorage() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+}
+
+export { isAuthenticated, getToken, login, logoutStorage };

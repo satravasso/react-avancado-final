@@ -2,16 +2,27 @@ import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import { useFormik } from "formik";
 import { validationDados } from "./validate";
 
+import { createPost } from "../services/api";
+import { useHistory } from "react-router";
+
 export const Form = () => {
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       title: "",
-      text: "",
+      content: "",
     },
     validationSchema: validationDados,
     onSubmit: (values, { setStatus, resetForm }) => {
-      setStatus({ success: true });
-      resetForm({});
+      createPost(values)
+        .then(() => {
+          setStatus({ success: true });
+          history.push("/");
+        })
+        .catch((err) => {
+          setStatus({ success: false });
+          console.error(err);
+        });
     },
   });
 
@@ -34,12 +45,12 @@ export const Form = () => {
         <TextField
           label="Texto"
           variant="outlined"
-          name="text"
+          name="content"
           fullWidth
           onChange={formik.handleChange}
-          value={formik.values.text}
-          error={formik.touched.text && Boolean(formik.errors.text)}
-          helperText={formik.errors.text}
+          value={formik.values.content}
+          error={formik.touched.content && Boolean(formik.errors.content)}
+          helperText={formik.errors.content}
         />
       </Grid>
 

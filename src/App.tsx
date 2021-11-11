@@ -6,6 +6,7 @@ import Login from "./module/login/pages/Login";
 import { AuthContextProv } from "./context/authContext";
 import AppHeader from "./module/posts/components/Header";
 import ListMoviePage from "./module/posts/pages/ListPosts";
+import { CreateUser } from "./module/login/pages/CreateUser";
 
 function App() {
   const context = useContext(AuthContextProv);
@@ -24,6 +25,9 @@ function App() {
         </PrivateRoute>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/register">
+          <CreateUser />
         </Route>
         <Route>404</Route>
       </Switch>

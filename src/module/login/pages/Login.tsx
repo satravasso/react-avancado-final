@@ -4,12 +4,12 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { AuthContextProv } from "../../../context/authContext";
 
 function Login() {
-  const [fields, setFields] = useState({ username: "", password: "" });
+  const [fields, setFields] = useState({ email: "", password: "" });
   const history = useHistory();
   const context = useContext(AuthContextProv);
   const { isAuthenticated } = context;
@@ -29,7 +29,7 @@ function Login() {
   async function handleSubmit(event: any) {
     event.preventDefault();
     try {
-      await context.login(fields.username, fields.password);
+      await context.login(fields.email, fields.password);
       history.push("/");
     } catch (error) {
       alert("erro" + error);
@@ -50,11 +50,11 @@ function Login() {
       <Box component="form" onSubmit={handleSubmit}>
         <TextField
           margin="normal"
-          label="Usuário"
+          label="Email"
           variant="outlined"
           fullWidth
-          name="login"
-          value={fields.username}
+          name="email"
+          value={fields.email}
           onChange={handleChange}
         />
         <TextField
@@ -76,6 +76,9 @@ function Login() {
         >
           Entrar
         </Button>
+        <Typography variant="body1">
+          Não possui conta? Se registre <Link to="/register">aqui</Link>
+        </Typography>
       </Box>
     </Container>
   );

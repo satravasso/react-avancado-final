@@ -1,6 +1,6 @@
+import axios from "axios";
 import React from "react";
-import { isNonNullChain } from "typescript";
-import { authenticate } from "../module/posts/services/api";
+import { logoutStorage } from "../module/login/services/auth";
 
 const AuthContextProv = React.createContext({
   token: "",
@@ -24,7 +24,7 @@ function AuthProvider(props: any) {
   }, []);
 
   React.useEffect(() => {
-    if (token !== "") {
+    if (token) {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setIsAuthenticated(true);
@@ -35,22 +35,27 @@ function AuthProvider(props: any) {
     }
   }, [token, user]);
 
-  async function login(login: string, password: string) {
-    // const response: any = await authenticate(login, password);
-
-    setToken("dsf");
-    setUser({ id: 1, name: "Sabrina" });
-    // if (response.status === 200 && response.data.auth === true) {
-    //   setToken(response.data.token);
-    //   setUser({ id: 1, name: "Sabrina" });
-    //   return true;
-    // }
-    return true;
+  async function login(email: string, password: string) {
+    await axios
+      .post(`${process.env.REACT_APP_AUTH_API}auth/login`, {
+        email,
+        password,
+      })
+      .then((res: any) => {
+        setToken(res.data.token);
+        setUser({ email });
+        return true;
+      })
+      .catch((err) => {
+        console.error(err);
+        return false;
+      });
   }
 
   function logout() {
     setToken(null);
     setUser({ id: 0, name: "" });
+    logoutStorage();
   }
 
   return (

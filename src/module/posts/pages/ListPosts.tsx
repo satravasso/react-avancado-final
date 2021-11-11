@@ -8,9 +8,10 @@ import Typography from "@mui/material/Typography";
 import { getPosts, deletePost } from "../services/api";
 
 const columns = [
+  { field: "id", headerName: "ID", width: 50 },
   { field: "title", headerName: "Título", width: 100 },
-  { field: "text", headerName: "Texto", width: 350 },
-  { field: "author", headerName: "Autor", width: 150 },
+  { field: "content", headerName: "Conteúdo", width: 350 },
+  { field: "createdAt", headerName: "Data de criação", width: 150 },
 ];
 
 function ListMoviePage() {
@@ -24,10 +25,11 @@ function ListMoviePage() {
 
   async function getPostsFromApi() {
     const response: any = await getPosts();
-    const data = response.data.map((movie: any) => {
-      movie.id = movie.movieId;
-      return movie;
+    const data = response.data.map((blog: any) => {
+      blog.id = blog.id;
+      return blog;
     });
+
     setRows(data);
   }
 
