@@ -8,6 +8,9 @@ import { useFormik } from "formik";
 import { validationDados } from "../scripts/validate";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@mui/material";
+import React from "react";
 
 export const CreateUser = () => {
   const history = useHistory();
@@ -29,10 +32,29 @@ export const CreateUser = () => {
         })
         .catch((err) => {
           setStatus({ success: false });
+          handleMessage(err.message, "error");
           console.error(err);
         });
     },
   });
+
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [severity, setSeverity] = React.useState("");
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleMessage(message: string, severity: string) {
+    setOpen(true);
+    setMessage(message);
+    setSeverity(severity);
+  }
 
   return (
     <Container
@@ -44,6 +66,11 @@ export const CreateUser = () => {
         mt: 5,
       }}
     >
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
       <form onSubmit={formik.handleSubmit}>
         <Typography variant="h4" textAlign="center">
           Usuário
@@ -93,6 +120,7 @@ export const CreateUser = () => {
             size="large"
             type="submit"
             color="secondary"
+            style={{ marginBottom: 20 }}
           >
             Salvar
           </Button>

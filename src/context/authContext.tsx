@@ -47,8 +47,7 @@ function AuthProvider(props: any) {
         return true;
       })
       .catch((err) => {
-        console.error(err);
-        return false;
+        throw Error(err);
       });
   }
 
